@@ -1,0 +1,40 @@
+{{/* берём шаблон base и встраиваем туда block body */}}
+{{template "base" . }}
+{{define "body"}}
+    <div class="container">
+        <div class="row">
+            <div class="col"><h1>Burgers</h1></div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <form action="/admin/burgers/save" method="post" enctype="multipart/form-data">
+                    {{/* mime type */}}
+                    <input type="file" name="image" accept="image/*"/>
+                        <input type="hidden" name="action" value="save" >
+                        <input type="text" name="name" placeholder="Название продукта">
+                        <input type="number" name="price" placeholder="Цена">
+                        <button>Добавить</button>
+                </form>
+            </div>
+        </div>
+        {{/*  Emmet: .row > .col + Tab */}}
+        <div class="row">
+            {{ range .Burgers }}
+                <div class="col-4">
+                    <div class="card">
+                        <img src="../media/{{ .FileName }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ .Name }}</h5>
+                            <p class="card-text">
+                            <h3><span class="badge badge-pill badge-danger">{{ .Price }} $</span></h3></p>
+                            <form method="post" action="/admin/burgers/remove">
+                                <input type="hidden" name="id" value="{{.Id}}">
+                                <button class="btn btn-primary">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {{ end }}
+        </div>
+    </div>
+{{end}}
